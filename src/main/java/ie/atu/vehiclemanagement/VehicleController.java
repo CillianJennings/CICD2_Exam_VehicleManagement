@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/vehicle")
@@ -16,10 +16,22 @@ public class VehicleController {
     public VehicleController(VehicleService vehicleService){
         this.vehicleService=vehicleService;
     }
-    @GetMapping("/getVehicle")
+    @GetMapping("/getVehicles")
     public List<Vehicle> getAllVehicles(){
         return vehicleService.getAllVehicles();
     }
+    @GetMapping("/{registrationNumber}")
+    public ResponseEntity<String> getVehicleByReg(@PathVariable String registrationNumber){
+        Optional<String> vehicle = vehicleService.findVehicleByReg(registrationNumber);
+        boolean status = vehicleService.findVehicleByReg(registrationNumber);
+        if(status){
+
+            return ResponseEntity.ok(vehicle.get());
+        }else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/addVehicle")
     public ResponseEntity<String> addVehicle(@Valid @RequestBody Vehicle newVehicle){
         vehicleService.addVehicle(newVehicle);

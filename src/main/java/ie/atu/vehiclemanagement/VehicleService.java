@@ -13,6 +13,14 @@ public class VehicleService {
     public List<Vehicle> getAllVehicles(){
         return vehicleRep.findAll();
     }
+    public boolean findVehicleByReg(String registrationNumber){
+        Optional<Vehicle> existingVehicle = vehicleRep.findById(registrationNumber);
+        if(existingVehicle.isPresent()){
+            return true;
+            //return vehicleRep.findById(registrationNumber);
+        }
+        return false;
+    }
     public void addVehicle(Vehicle vehicle){
         vehicleRep.save(vehicle);
     }
